@@ -1,0 +1,111 @@
+-- Customer and related classes
+enum CustomerType {
+    Individual
+    Company
+}
+
+class Customer {
+    CRM_ID: String
+    type: CustomerType
+    description: String [0..1]
+}
+
+class Individual {
+    firstName: String
+    lastName: String
+    middleName: String [0..1]
+    email: String
+    phone: String [0..1]
+    locale: String [0..1] = "English"
+}
+
+class Company {
+    name: String
+    phone: String [0..1]
+    fax: String [0..1]
+}
+
+class Details {
+    street: String [0..1]
+    city: String [0..1]
+    postalCode: String [0..1]
+    state: String [0..1]
+    country: String [0..1]
+}
+
+class Contact {
+    firstName: String
+    lastName: String
+    middleName: String [0..1]
+    email: String
+    locale: String [0..1] = "English"
+}
+
+-- Entitlement and related classes
+enum EntitlementType {
+    Hardware Key
+    Product Key
+    Protection Key Update
+}
+
+class Entitlement {
+    EID: String
+    type: EntitlementType
+    startDate: Date
+    endDate: Date [0..1]
+    neverExpires: Boolean = true
+    comments: String [0..1]
+}
+
+-- Product and Feature classes
+enum LockingType {
+    HL
+    SL-AdminMode
+    SL-UserMode
+    "HL or SL-AdminMode"
+    "HL or SL (AdminMode or UserMode)"
+}
+
+enum Rehost {
+    Enable
+    Disable
+    "Leave as it is"
+    "Specify at entitlement time"
+}
+
+class Product {
+    id: Integer
+    name: String
+    name.size() <= 50
+    lockingType: LockingType
+    rehost: Rehost
+    description: String [0..1]
+}
+
+class Feature {
+    id: Integer
+    name: String
+    name.size() <= 50
+    description: String [0..1]
+}
+
+class BatchCode {
+    id: String
+    id.size() = 5
+}
+
+-- Relationships
+Customer <|-- Individual
+Customer <|-- Company
+Individual -- Details: billing
+Individual -- Details: shipping
+Company -- Details: billing
+Company -- Details: shipping
+Company "1" -- "1..*" Contact
+Entitlement "0..*" -- "1" Customer
+BatchCode "1" -- "1" Individual
+Feature "1..*" -- "0..*" Product: associatedFeature
+Product "0..*" -- "1" Product: provisionalProduct
+Product "1" -- "0..*" Product: baseProduct
+Individual "1" -- "0..*" Feature: features
+Individual "1" -- "0..*" Product: products

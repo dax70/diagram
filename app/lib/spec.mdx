@@ -1,0 +1,297 @@
+# Complete UML-TypeScript Specification
+
+## 1. Basic Syntax
+
+1. Use `class` keyword to define a class
+2. Use `enum` keyword to define an enumeration
+3. Use `:` to separate attribute names from types
+4. Use `=` to define default values
+5. Use `--` for single-line comments
+6. Use `[...]` for multiplicity
+7. Enclose multi-word string literals in double quotes
+
+## 2. Class Definition
+
+```
+class ClassName {
+    attribute1: Type1
+    attribute2: Type2 [0..1]
+    attribute3: Type3 = defaultValue
+    attribute4: Type4 [0..1] = defaultValue
+    attribute5: Type5
+    attribute5.constraint() operator value
+}
+```
+
+## 3. Enum Definition
+
+```
+enum EnumName {
+    Value1
+    Value2
+    "Value With Spaces"
+    Value4 | Value5 | "Value With Spaces 6"
+}
+```
+
+## 4. Relationships
+
+1. Inheritance: `<|--`
+2. Association: `--`
+3. Aggregation: `--o`
+4. Composition: `--*`
+
+Syntax:
+
+```
+SourceClass "sourceMultiplicity" relationshipType "targetMultiplicity" TargetClass: roleName
+```
+
+Simplified syntax (when multiplicity and role name are not needed):
+
+```
+SourceClass relationshipType TargetClass
+```
+
+Examples:
+
+```
+Class1 <|-- Class2
+Class1 "1" -- "0..*" Class2: roleName
+Class1 "1" --o "1..*" Class2
+Class1 "1" --* "5" Class2: containment
+Class1 -- Class2
+```
+
+## 5. Constraints
+
+Use dot notation and parentheses for constraints:
+
+```
+attributeName.constraintType(parameters) operator value
+```
+
+Supported operators:
+
+- Comparison: `==`, `!=`, `<`, `<=`, `>`, `>=`
+- Logical: `&&`, `||`, `!`
+
+Examples:
+
+```
+name.size() <= 50
+id.length() == 5
+price.min() > 0
+isActive == true
+age >= 18 && age <= 65
+```
+
+## 6. Comments
+
+Use `--` for single-line comments:
+
+```
+-- This is a comment
+```
+
+## 7. Detailed Syntax Rules
+
+### 7.1 Multiplicity
+
+Supported multiplicity notations:
+
+- `[0..1]`: Optional (0 or 1)
+- `[1]`: Exactly 1 (required)
+- `[0..*]`: 0 or more
+- `[1..*]`: 1 or more
+- `[n..m]`: Between n and m (inclusive)
+
+### 7.2 Default Values
+
+Specify default values after the type and multiplicity:
+
+```
+attribute: Type [multiplicity] = defaultValue
+```
+
+Examples:
+
+```
+name: String = "John Doe"
+age: Integer = 30
+isActive: Boolean = true
+```
+
+### 7.3 Attribute Types
+
+Supported attribute types:
+
+- Basic types: String, Integer, Boolean, Date, Decimal, Float
+- Custom types: Other classes defined in the model
+- Collection types: List, Set, Map (use angle brackets for generics)
+- Enum types: Any enum defined in the model
+
+Examples:
+
+```
+name: String
+age: Integer
+birthDate: Date
+salary: Decimal
+temperature: Float
+manager: Employee
+status: CustomerStatus
+skills: List<String>
+departments: Set<Department>
+employeeRoles: Map<String, Role>
+```
+
+### 7.4 Enum Values
+
+Enum values can be:
+
+- Simple identifiers (PascalCase)
+- String literals (for values with spaces or special characters)
+- Alternatives separated by the `|` symbol
+
+Example:
+
+```
+enum Status {
+    Active
+    Inactive
+    "On Hold"
+    "Pending Review"
+    Open | Closed | "In Progress"
+    camelCase
+    snake_case
+    "With Spaces and Symbols!@#"
+}
+```
+
+### 7.5 Constraint Types
+
+Common constraint types:
+
+- `size()`: For strings and collections
+- `length()`: For strings
+- `min()`, `max()`: For numeric types
+- Custom constraints can be defined as needed
+
+Mode on constraints and relationships
+
+## 8. Error Handling
+
+The parser and lexer should provide detailed error messages, including:
+
+- Line and column numbers for errors
+- Clear description of the error
+- Suggestions for fixing common errors when possible
+
+Example error message:
+
+```
+Error on line 15, column 10: Invalid attribute type 'Strng' for attribute 'name'.
+Did you mean 'String'?
+```
+
+## 9. Complete Example
+
+```
+-- Customer Management System
+
+enum CustomerType {
+    Individual
+    Company
+    "Government Agency"
+}
+
+enum CustomerStatus {
+    Active | Inactive | "On Hold"
+}
+
+class Customer {
+    CRM_ID: String
+    CRM_ID.length() == 10
+    type: CustomerType
+    status: CustomerStatus = Active
+    description: String [0..1]
+    registrationDate: Date = "2023-01-01"
+    isVIP: Boolean = false
+}
+
+class Individual {
+    firstName: String
+    lastName: String
+    middleName: String [0..1]
+    email: String
+    phone: String [0..1]
+    locale: String [0..1] = "English"
+    age: Integer
+    age.min() >= 18
+}
+
+class Company {
+    name: String
+    name.size() <= 100
+    industry: String
+    foundedYear: Integer [0..1]
+    annualRevenue: Decimal [0..1]
+    employeeCount: Integer [0..1]
+}
+
+class ContactInfo {
+    phone: String [0..1]
+    email: String [0..1]
+    address: Address [0..1]
+}
+
+class Address {
+    street: String
+    city: String
+    postalCode: String
+    country: String
+}
+
+class Order {
+    orderID: String
+    orderDate: Date
+    totalAmount: Decimal
+    status: OrderStatus
+}
+
+enum OrderStatus {
+    Pending | Shipped | Delivered | Cancelled
+}
+
+-- Relationships
+Customer <|-- Individual
+Customer <|-- Company
+Customer "1" -- "1..*" ContactInfo
+ContactInfo "1" -- "0..1" Address
+Customer "1" -- "0..*" Order: places
+Company "1" --o "0..*" Individual: employs
+```
+
+This specification combines elements from UML, TypeScript-like syntax, and common modeling practices to create a readable and expressive textual modeling language.
+
+## 10. Method Signatures
+
+Methods can be defined in classes to represent operations.
+
+Syntax:
+
+```
+methodName(param1: Type1, param2: Type2): ReturnType
+```
+
+Example:
+
+```
+class Calculator {
+    add(a: Integer, b: Integer): Integer
+    subtract(a: Integer, b: Integer): Integer
+    multiply(a: Float, b: Float): Float
+    divide(a: Float, b: Float): Float
+}
+```

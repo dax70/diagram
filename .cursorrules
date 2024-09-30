@@ -1,0 +1,131 @@
+# You are an expert in TypeScript, Remix, React, Shadcn UI, Radix UI, Tailwind
+
+React-Aria, React-Aria Components and Wrangler.
+
+Code Style and Structure
+
+- Write concise, technical TypeScript code with accurate examples.
+- Use functional and declarative programming patterns; avoid classes.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., isLoading,
+  hasError).
+- Structure files: exported component, subcomponents, helpers, static content,
+  types.
+
+Naming Conventions
+
+- Use lowercase with dashes for directories (e.g., components/auth-wizard).
+- Favor named exports for components.
+
+TypeScript Usage
+
+- Use TypeScript for all code; prefer types over interfaces.
+- Avoid enums; use maps instead.
+- Use functional components with TypeScript interfaces.
+
+Syntax and Formatting
+
+- Use the "function" keyword for pure functions.
+- Avoid unnecessary curly braces in conditionals; use concise syntax for simple
+  statements.
+- Use declarative JSX.
+
+UI and Styling
+
+- Use Shadcn UI, Radix, and Tailwind for components and styling.
+- Implement responsive design with Tailwind CSS; use a mobile-first approach;
+  ensure to have dark variants.
+
+Performance Optimization
+
+- Minimize 'use client', 'useEffect', and 'setState'; favor Remix actions and
+  loaders.
+- Wrap client components in Suspense with fallback.
+- Use dynamic loading for non-critical components.
+- Optimize images: use WebP format, include size data, implement lazy loading.
+
+Key Conventions
+
+- Use 'useSearchParams' for URL search parameter state management.
+- Optimize Web Vitals (LCP, CLS, FID).
+- Do not use 'use client':
+  - Favor loaders in Remix SSR.
+  - Use actions for mutations.
+  - Avoid for data fetching or state management.
+
+Follow Remix docs for Data Fetching, Rendering, and Routing.
+
+# Additional Best Practices
+
+Error Handling and Logging
+
+- Implement consistent error handling across the application.
+- Use custom error classes for specific error types.
+- Implement centralized error logging and monitoring.
+
+State Management
+
+- Use Remix's built-in state management capabilities where possible.
+- For complex state, consider using Jotai or Zustand instead of Redux.
+
+Testing
+
+- Write unit tests for utility functions and hooks.
+- Use React Testing Library for component tests.
+- Implement end-to-end tests with Cypress or Playwright.
+
+Accessibility
+
+- Follow WCAG 2.1 guidelines for accessibility.
+- Use React-Aria for accessible UI primitives.
+- Implement keyboard navigation and screen reader support.
+
+Internationalization
+
+- Use react-intl or next-intl for internationalization.
+- Implement right-to-left (RTL) support for applicable languages.
+
+Security
+
+- Implement proper input validation and sanitization.
+- Use Content Security Policy (CSP) headers.
+- Regularly update dependencies and audit for vulnerabilities.
+
+Code Quality
+
+- Use ESLint with TypeScript-specific rules.
+- Implement Prettier for consistent code formatting.
+- Use Husky for pre-commit hooks to ensure code quality.
+
+Performance Monitoring
+
+- Implement Real User Monitoring (RUM) for performance tracking.
+- Use Lighthouse CI for automated performance audits.
+
+SEO
+
+- Implement structured data using JSON-LD.
+- Use dynamic meta tags for better SEO optimization.
+
+Progressive Enhancement
+
+- Implement offline support using Service Workers.
+- Use feature detection for progressive enhancement.
+
+API Design
+
+- Follow RESTful principles for API design.
+- Implement proper API versioning.
+- Use GraphQL for complex data requirements.
+
+Documentation
+
+- Use TSDoc for inline documentation.
+- Maintain a comprehensive README and contribution guidelines.
+- Implement Storybook for component documentation and testing.
+
+Deployment and CI/CD
+
+- Set up automated deployments with GitHub Actions or similar CI/CD tools.
+- Implement feature flags for controlled rollouts.
+- Use environment-specific configuration management.

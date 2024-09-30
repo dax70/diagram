@@ -1,0 +1,109 @@
+classDiagram
+
+direction TB
+
+enum CustomerType {
+    INDIVIDUAL
+    COMPANY
+}
+
+enum EntitlementType {
+    HARDWARE_KEY
+    PRODUCT_KEY
+    PROTECTION_KEY_UPDATE
+}
+
+enum LockingType {
+    HL
+    SL_ADMIN_MODE
+    SL_USER_MODE
+}
+
+enum Rehost {
+    ENABLE
+    DISABLE
+    LEAVE_AS_IS
+    SPECIFY_AT_ENTITLEMENT_TIME
+}
+
+class Customer {
+    +CRM_ID: string
+    +type: CustomerType
+    +description: string [0..1]
+}
+
+class Entitlement {
+    +EID: string
+    +type: EntitlementType
+    +startDate: Date
+    +endDate: Date [0..1]
+    +neverExpires: boolean = true
+    +comments: string [0..1]
+}
+
+class Individual {
+    +firstName: string
+    +lastName: string
+    +middleName: string [0..1]
+    +email: string
+    +phone: string [0..1]
+    +locale: string [0..1] = "English"
+}
+
+class Company {
+    +name: string
+    +phone: string [0..1]
+    +fax: string [0..1]
+}
+
+class Details {
+    +street: string [0..1]
+    +city: string [0..1]
+    +postalCode: string [0..1]
+    +state: string [0..1]
+    +country: string [0..1]
+}
+
+class Contact {
+    +firstName: string
+    +lastName: string
+    +middleName: string [0..1]
+    +email: string
+    +locale: string [0..1] = "English"
+}
+
+class BatchCode {
+    +id: string
+    // id must be exactly 5 characters long
+}
+
+class Feature {
+    +id: number
+    +name: string
+    // name must be 50 characters or less
+    +description: string [0..1]
+}
+
+class Product {
+    +id: number
+    +name: string
+    // name must be 50 characters or less
+    +lockingType: LockingType
+    +rehost: Rehost
+    +description: string [0..1]
+}
+
+Customer <|-- Individual
+Customer <|-- Company
+Individual -- Details : "billing"
+Individual -- Details : "shipping"
+Company -- Details : "billing"
+Company -- Details : "shipping"
+Company "1" -- "1..*" Contact : has
+Entitlement "0..*" -- "1" Customer : belongs to
+BatchCode "1" -- "1" Individual : assigned to
+Feature "1..*" -- "0..*" Product : "associatedFeature"
+Product "0..*" -- "1" Product : "provisionalProduct"
+Product "1" -- "0..*" Product : "baseProduct"
+Individual "1" -- "0..*" Feature : "has"
+Individual "1" -- "0..*" Product : "owns"

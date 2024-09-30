@@ -1,0 +1,43 @@
+# Test File
+
+```UML
+class Customer
+- CRM_ID {id}
+- type: CustomerType
+- description: String [0..1]
+
+class Individual
+- firstName: String
+- lastName: String
+- middleName: String [0..1]
+- email: String
+- phone: String [0..1]
+- locale: String [0..1] = "English"
+
+class Company
+- name: String
+- phone: String [0..1]
+- fax: String [0..1]
+
+class Entitlement
+- EID: String {id}
+- type: EntitlementType
+- startDate: Date
+- endDate: Date [0..1]
+- neverExpires: Boolean = true
+- comments: String [0..1]
+
+enum EntitlementType
+- Hardware Key
+- Product Key
+- Protection Key Update
+
+enum CustomerType
+- Individual
+- Company
+
+Customer -> Individual
+Customer -> Company
+Customer -> CustomerType
+Entitlement -> EntitlementType
+```
